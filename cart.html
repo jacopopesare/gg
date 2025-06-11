@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Il Tuo Carrello</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 2rem;
+            background-color: #f9f9f9;
+        }
+        .cart-container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ccc;
+            padding: 1rem 0;
+        }
+        .cart-item img {
+            width: 80px;
+        }
+        .total {
+            font-size: 1.5rem;
+            text-align: right;
+            margin-top: 1rem;
+        }
+        .btn {
+            padding: 0.8rem 1.5rem;
+            background: #e60000;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background: #cc0000;
+        }
+    </style>
+</head>
+<body>
+    <div class="cart-container">
+        <h1>Il Tuo Carrello</h1>
+        <div id="cart-items"></div>
+        <div class="total">Totale: €<span id="cart-total">0.00</span></div>
+        <button class="btn" onclick="checkout()">Procedi al Pagamento</button>
+    </div>
+
+    <script>
+        function loadCart() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const container = document.getElementById('cart-items');
+            const totalEl = document.getElementById('cart-total');
+            let total = 0;
+
+            container.innerHTML = '';
+            cart.forEach((item, index) => {
+                total += item.price;
+                container.innerHTML += `
+                    <div class="cart-item">
+                        <div>
+                            <strong>${item.name}</strong><br>
+                            Taglia: ${item.size} - €${item.price.toFixed(2)}
+                        </div>
+                        <div>
+                            <img src="${item.image}" alt="${item.name}">
+                            <button class="btn" onclick="removeItem(${index})">Rimuovi</button>
+                        </div>
+                    </div>
+                `;
+            });
+            totalEl.textContent = total.toFixed(2);
+        }
+
+        function removeItem(index) {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart.splice(index, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            loadCart();
+        }
+
+        function checkout() {
+            alert('Pagamento simulato con successo!');
+            localStorage.removeItem('cart');
+            window.location.href = 'index.html';
+        }
+
+        loadCart();
+    </script>
+</body>
+</html>
